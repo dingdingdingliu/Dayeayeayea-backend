@@ -1,9 +1,9 @@
 {
   "development": {
-    "username": "root",
-    "password": null,
-    "database": "database_development",
-    "host": "127.0.0.1",
+    "username": "ding",
+    "password": "AA1203aa",
+    "database": "ding_final_project",
+    "host": "localhost",
     "dialect": "mysql"
   },
   "test": {

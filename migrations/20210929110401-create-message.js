@@ -11,6 +11,12 @@ module.exports = {
       orderId: {
         type: Sequelize.INTEGER,
       },
+      memberId: {
+        type: Sequelize.INTEGER,
+      },
+      adminId: {
+        type: Sequelize.INTEGER,
+      },
       content: {
         type: Sequelize.TEXT,
       },

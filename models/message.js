@@ -11,11 +11,19 @@ module.exports = (sequelize, DataTypes) => {
       Message.belongsTo(models.Order, {
         foreignKey: 'orderId',
       })
+      Message.belongsTo(models.Member, {
+        foreignKey: 'memberId',
+      })
+      Message.belongsTo(models.Admin, {
+        foreignKey: 'adminId',
+      })
     }
   }
   Message.init(
     {
       orderId: DataTypes.INTEGER,
+      memberId: DataTypes.INTEGER,
+      adminId: DataTypes.INTEGER,
       content: DataTypes.TEXT,
       isAdmin: DataTypes.BOOLEAN,
       isDeleted: DataTypes.INTEGER,

@@ -11,6 +11,9 @@ module.exports = (sequelize, DataTypes) => {
       Member.hasMany(models.Order, {
         foreignKey: 'memberId',
       })
+      Member.hasMany(models.Message, {
+        foreignKey: 'memberId',
+      })
     }
   }
   Member.init(

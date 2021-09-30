@@ -25,7 +25,6 @@ module.exports = (sequelize, DataTypes) => {
       memberId: DataTypes.INTEGER,
       adminId: DataTypes.INTEGER,
       content: DataTypes.TEXT,
-      isAdmin: DataTypes.BOOLEAN,
       isDeleted: DataTypes.INTEGER,
     },
     {

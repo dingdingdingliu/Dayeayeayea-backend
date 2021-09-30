@@ -20,9 +20,6 @@ module.exports = {
       content: {
         type: Sequelize.TEXT,
       },
-      isAdmin: {
-        type: Sequelize.BOOLEAN,
-      },
       isDeleted: {
         type: Sequelize.INTEGER,
       },

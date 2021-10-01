@@ -14,7 +14,11 @@
   },
   "devDependencies": {},
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "migrate": "npx sequelize-cli db:migrate",
+    "get-test-data": "npx sequelize-cli db:seed:all",
+    "build": "npm run migrate && npm run get-test-data && node index.js",
+    "start": "node index.js"
   },
   "author": "",
   "license": "ISC"

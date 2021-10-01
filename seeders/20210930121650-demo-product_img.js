@@ -15,6 +15,17 @@ module.exports = {
         updatedAt: new Date(),
       },
       {
+        productId: 1,
+        imgUrlSm:
+          'https://images.unsplash.com/photo-1499624412197-fdc740373527?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=150&q=80',
+        imgUrlMd:
+          'https://images.unsplash.com/photo-1499624412197-fdc740373527?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w500&q=80',
+        imgUrlLg:
+          'https://images.unsplash.com/photo-1499624412197-fdc740373527?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=869&q=80',
+        createdAt: new Date(),
+        updatedAt: new Date(),
+      },
+      {
         productId: 2,
         imgUrlSm:
           'https://images.unsplash.com/photo-1617351165968-835ea5778860?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=150&q=80',
@@ -26,6 +37,17 @@ module.exports = {
         updatedAt: new Date(),
       },
       {
+        productId: 2,
+        imgUrlSm:
+          'https://images.unsplash.com/photo-1617351165959-471f874b60a9?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=150&q=80',
+        imgUrlMd:
+          'https://images.unsplash.com/photo-1617351165959-471f874b60a9?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=500&q=80',
+        imgUrlLg:
+          'https://images.unsplash.com/photo-1617351165959-471f874b60a9?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=871&q=80',
+        createdAt: new Date(),
+        updatedAt: new Date(),
+      },
+      {
         productId: 3,
         imgUrlSm:
           'https://images.unsplash.com/photo-1623826538345-192361e2d4cd?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=150&q=80',
@@ -33,6 +55,17 @@ module.exports = {
           'https://images.unsplash.com/photo-1623826538345-192361e2d4cd?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=80',
         imgUrlLg:
           'https://images.unsplash.com/photo-1623826538345-192361e2d4cd?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=870&q=80',
+        createdAt: new Date(),
+        updatedAt: new Date(),
+      },
+      {
+        productId: 3,
+        imgUrlSm:
+          'https://images.unsplash.com/photo-1623537730966-ae1154a07fd1?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=150&q=80',
+        imgUrlMd:
+          'https://images.unsplash.com/photo-1623537730966-ae1154a07fd1?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=80',
+        imgUrlLg:
+          'https://images.unsplash.com/photo-1623537730966-ae1154a07fd1?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=1031&q=80',
         createdAt: new Date(),
         updatedAt: new Date(),
       },
@@ -209,6 +242,17 @@ module.exports = {
           'https://images.unsplash.com/photo-1627662056598-dcfc5000f769?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=500&q=80',
         imgUrlLg:
           'https://images.unsplash.com/photo-1627662056598-dcfc5000f769?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=870&q=80',
+        createdAt: new Date(),
+        updatedAt: new Date(),
+      },
+      {
+        productId: 19,
+        imgUrlSm:
+          'https://images.unsplash.com/photo-1591632288574-a387f820a1ca?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=150&q=80',
+        imgUrlMd:
+          'https://images.unsplash.com/photo-1591632288574-a387f820a1ca?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=80',
+        imgUrlLg:
+          'https://images.unsplash.com/photo-1591632288574-a387f820a1ca?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=870&q=80',
         createdAt: new Date(),
         updatedAt: new Date(),
       },

@@ -1,10 +1,10 @@
 const db = require('../models')
 const { Product } = db
-const { Op } = require("sequelize");
+const { Op } = require("sequelize")
 
 const ProductsController = {
   getAll: async (req, res) => {
-    const { search } = req.query;
+    const { search } = req.query
     
     let data = null
     if (search) {
@@ -18,6 +18,7 @@ const ProductsController = {
     } else {
       data = await Product.findAll()
     }
+
     return res.status(200).json({
       ok: 1,
       data
@@ -95,9 +96,9 @@ const ProductsController = {
       isDeleted,
     })
 
-    res.status(200).json({
+    return res.status(200).json({
       ok: 1,
-      data: _product
+      message: 'Update Success'
     })
   },
   deleteOne: async (req, res) => {
@@ -105,12 +106,37 @@ const ProductsController = {
     const _product = await Product.findByPk(id)
     _product.destroy()
 
-    res.status(200).json({
+    return res.status(200).json({
       ok: 1,
       message: 'success',
     })
   },
+  getByCategory: async (req, res) => {
+    const { category } = req.params
+    const _products = await Product.findAll({
+      where: {
+        category
+      }
+    })
+    // return _products Array
+    return res.status(200).json({
+      ok: 1,
+      data: _products
+    })
+  },
+  getByArticle: async (req, res) => {
+    const { article } = req.params
+    const _products = await Product.findAll({
+      where: {
+        article
+      }
+    })
+    // return _products Array
+    return res.status(200).json({
+      ok: 1,
+      data: _products
+    })
+  }
 }
-
 
 module.exports = ProductsController

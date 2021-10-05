@@ -108,7 +108,7 @@ const ProductsController = {
 
     return res.status(200).json({
       ok: 1,
-      message: 'success',
+      message: 'Delete Success',
     })
   },
   getByCategory: async (req, res) => {

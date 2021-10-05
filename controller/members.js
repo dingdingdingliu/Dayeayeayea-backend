@@ -61,7 +61,6 @@ const MembersController = {
     } = req.body
 
     const hashPassword = bcrypt.hashSync(password, SALTROUNDS)
-
     try {
       await Member.create({
         fullname,

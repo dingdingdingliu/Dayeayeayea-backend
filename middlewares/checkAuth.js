@@ -1,15 +1,11 @@
-/**
-request headers --> Authorization
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9
-.eyJuaWNrbmFtZSI6ImFkbWluIiwidHlwZSI6MSwiZW1haWwiOiJhZG1pbkAxNjMuY29tIiwiaWF0IjoxNTcyNzU3MjAzLCJleHAiOjE1NzI3NjA4MDN9
-.f4hfN1IjU4E23Lo44N-2VLzc1qoyNu1oZg2iQreZTfU
-*/
 const { verifyToken, getUserId } = require('../utils/auth')
+const createError = require('http-errors')
 
 
 const checkAuth = (req, res, next) => {
   const { authorization } = req.headers
   if ( authorization === undefined || authorization.split(' ')[0] !== 'Bearer') {
+    
     const status = 401
     const message = 'Error in authorization format'
     return res.status(status).json({ status, message })

@@ -1,5 +1,3 @@
-require('dotenv').config();
-
 const express = require('express')
 const logger = require('morgan')
 const createError = require('http-errors')
@@ -23,19 +21,15 @@ app.use('/articles', articlesRouter)
 app.use('/members', membersRouter)
 app.use('/orders', ordersRouter)
 app.use('/products', productsRouter)
-app.use('/', (req, res, next) => {
-  next(createError())
-  // const status = 200
-  // const message = 'Hello Welcome DAYEAYEAYEA'
-  // res.status(status).json({status, message})
+app.use(/\//, (req, res, next) => {
+  res.status(200).json({
+    ok: 1,
+    message: 'Hello Welcome DAYEAYEAYEA'
+  })
 })
-
-
-// catch 404 and forward to error handler
-app.use(function(req, res, next) {
+app.use('/*', (req, res, next) => {
   next(createError(404))
 })
-
 app.use(errorHandler)
 
 app.listen(port, () => {

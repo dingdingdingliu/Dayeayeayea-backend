@@ -20,7 +20,6 @@ const getUserId = (token) => {
 }
 
 
-
 module.exports = {
   createToken,
   verifyToken,

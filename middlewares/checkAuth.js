@@ -4,25 +4,18 @@ const createError = require('http-errors')
 
 const checkAuth = (req, res, next) => {
   const { authorization } = req.headers
-  if ( authorization === undefined || authorization.split(' ')[0] !== 'Bearer') {
-    
-    const status = 401
-    const message = 'Error in authorization format'
-    return res.status(status).json({ status, message })
+  if (authorization === undefined || authorization.split(' ')[0] !== 'Bearer') {
+    return next(createError(401, 'Error in authorization format'))
   }
   try {
     const verifyTokenResult = verifyToken(authorization.split(' ')[1])
     if (verifyTokenResult instanceof Error) {
-      const status = 401
-      const message = 'Access token not provided'
-      return res.status(status).json({ status, message })
+      return next(createError(401, 'Access token not provided'))
     }
-    next()
   } catch (err) {
-    const status = 401
-    const message = 'Error token is revoked'
-    res.status(status).json({ status, message })
+    return next(createError(401, 'Error token is revoked'))
   }
+  next()
 }
 
 
@@ -30,10 +23,9 @@ const checkUserId = (req, res, next) => {
   const { id } = req.params
   const { authorization } = req.headers
   const token = authorization.split(' ')[1]
+
   if (Number(id) !== getUserId(token)) {
-    const status = 401
-    const message = 'User don\'t have access'
-    return res.status(status).json({ status, message })
+    return next(createError(401, 'User don\'t have access'))
   } 
   next()
 }

@@ -1,11 +1,16 @@
-var express = require('express');
-var router = express.Router();
+const express = require('express')
+const router = express.Router()
+const Orders = require('../controller/orders')
+const { checkAuth } = require('../middlewares/authHandler')
 
-/* GET users listing. */
-router.get('/', function(req, res, next) {
-  const status = 200
-  const message = 'Hello, This is user !'
-  return res.status(status).json({status, message})
-});
+
+router.use(checkAuth)
+router.get('/', Orders.getAll)
+router.post('/', Orders.addOne)
+router.get('/:id([0-9]+)', Orders.getOne)
+router.get('/me', Orders.getOneByUser)
+router.patch('/:id([0-9]+)', Orders.updateOne)
+router.patch('/:id([0-9]+)/:action(normal|cancel|ship|complete)', Orders.updateStatus)
+router.delete('/:id([0-9]+)', Orders.deleteOne)
 
 module.exports = router

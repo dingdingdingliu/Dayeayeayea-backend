@@ -30,6 +30,7 @@ const MembersController = {
         })
       }
       return next(createError(401, 'Incorrect email or password'))
+
     } catch (error) {
       return next(createError(401, 'Login Fail'))
     }
@@ -41,6 +42,7 @@ const MembersController = {
         ok: 1,
         data
       })
+
     } catch (error) {
       return next(createError(401, 'Get members fail'))
     }
@@ -50,10 +52,14 @@ const MembersController = {
 
     try {
       const data = await Member.findByPk(id)
-      return res.status(200).json({
-        ok: 1,
-        data
-      })
+      if (data) {
+        return res.status(200).json({
+          ok: 1,
+          data
+        })
+      }
+      return next(createError(401, 'Get member fail'))
+      
     } catch (error) {
       return next(createError(401, 'Get member fail'))
     }
@@ -80,13 +86,13 @@ const MembersController = {
         address,
         phone,
       })
-      return res.status(200).json({
+      return res.status(201).json({
         ok: 1,
         message: 'Register Success',
       })
+
     } catch (error) {
       const { message } = error.errors[0]
-
       return next(createError(401, message || 'Register Fail'))
     }
   },
@@ -120,9 +126,9 @@ const MembersController = {
         ok: 1,
         message: 'Update Success'
       })
+
     } catch (error) {
       const { message } = error.errors[0]
-
       return next(createError(401, message || 'Update Fail'))
     }
 
@@ -138,6 +144,7 @@ const MembersController = {
         ok: 1,
         message: 'Delete Success',
       })
+      
     } catch (error) {
       return next(createError(401, message || 'Delete Fail'))
     }

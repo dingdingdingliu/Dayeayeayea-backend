@@ -26,8 +26,9 @@ const ProductsController = {
         ok: 1,
         data
       })
+
     } catch (error) {
-      return next(createError(401, 'Can\'t get products'))
+      return next(createError(401, 'Get products fail'))
     }
   },
   getOne: async (req, res, next) => {
@@ -35,12 +36,14 @@ const ProductsController = {
 
     try {
       const data = await Product.findByPk(id)
+      if (!data) next(createError(401, 'Get product fail'))
       return res.status(200).json({
         ok: 1,
         data
       })
+
     } catch (error) {
-      return next(createError(401, 'Can\'t get products'))
+      return next(createError(401, 'Get product fail'))
     }
   },
   addOne: async (req, res, next) => {
@@ -72,7 +75,7 @@ const ProductsController = {
       })
 
       if (_product) {
-        return res.status(200).json({
+        return res.status(201).json({
           ok: 1,
           message: 'Add product success',
         })
@@ -80,7 +83,8 @@ const ProductsController = {
       return next(createError(401, 'Add product fail'))
   
     } catch (error) {
-      return next(createError(401, 'Add product fail'))
+      const { message } = error.errors[0]
+      return next(createError(401, message || 'Add product fail'))
     }
   },
   updateOne: async (req, res, next) => {
@@ -119,8 +123,10 @@ const ProductsController = {
         ok: 1,
         message: 'Update product success'
       })
+
     } catch (error) {
-      return next(createError(401, 'Update product fail'))
+      const { message } = error.errors[0]
+      return next(createError(401, message || 'Update product fail'))
     }
     
   },
@@ -134,6 +140,7 @@ const ProductsController = {
         ok: 1,
         message: 'Delete product success',
       })
+
     } catch (error) {
       return next(createError(401, 'Delete product fail'))
     }
@@ -152,6 +159,7 @@ const ProductsController = {
         ok: 1,
         data: _products
       })
+
     } catch (error) {
       return next(createError(401, 'Get product fail'))
     }
@@ -170,6 +178,7 @@ const ProductsController = {
         ok: 1,
         data: _products
       })
+      
     } catch (error) {
       return next(createError(401, 'Get product fail'))
     }

@@ -37,8 +37,10 @@ const ProductsController = {
 
     try {
       const data = await Product.findAll()
+      if (data.length === 0) return next(createError(401, 'Data empty'))
+
       const totalPage = Math.floor(data.length / perPageProducts)
-      if (page > totalPage) next(createError(401, 'Over max page'))
+      if (page > totalPage) return next(createError(401, 'Over max page'))
       const _data = data.slice((page - 1) * perPageProducts, (page - 1) * perPageProducts + perPageProducts)
 
       return res.status(200).json({

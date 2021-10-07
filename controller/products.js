@@ -2,6 +2,7 @@ const db = require('../models')
 const { Product } = db
 const { Op } = require("sequelize")
 const createError = require('http-errors')
+const perPageProducts = process.env.PER_PAGE_PRODUCTS
 
 
 const ProductsController = {
@@ -25,6 +26,27 @@ const ProductsController = {
       return res.status(200).json({
         ok: 1,
         data
+      })
+
+    } catch (error) {
+      return next(createError(401, 'Get products fail'))
+    }
+  },
+  getByPage: async (req, res, next) => { 
+    const { page } = req.params
+
+    try {
+      const data = await Product.findAll()
+      const totalPage = Math.floor(data.length / perPageProducts)
+      if (page > totalPage) next(createError(401, 'Over max page'))
+      const _data = data.slice((page - 1) * perPageProducts, (page - 1) * perPageProducts + perPageProducts)
+
+      return res.status(200).json({
+        ok: 1,
+        currentPage: page,
+        totalPage,
+        perPageProducts,
+        _data
       })
 
     } catch (error) {

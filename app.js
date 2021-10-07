@@ -2,13 +2,15 @@ const express = require('express')
 const logger = require('morgan')
 const createError = require('http-errors')
 const errorHandler = require('./middlewares/errorHandler')
+const swaggerUi = require('swagger-ui-express')
+const YAML = require('yamljs')
+const swaggerDocument = YAML.load('./swagger.yaml')
 
 const articlesRouter = require('./routes/articles')
 const membersRouter = require('./routes/members')
 const ordersRouter = require('./routes/orders')
 const productsRouter = require('./routes/products')
 const adminRouter = require('./routes/admin')
-
 const faqController = require('./controller/faq')
 
 const app = express()
@@ -25,6 +27,7 @@ app.use('/orders', ordersRouter)
 app.use('/products', productsRouter)
 app.use('/faq', faqController.getAll)
 app.use('/admin', adminRouter)
+app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument))
 
 app.use(/\//, (req, res) => {
   res.status(200).json({

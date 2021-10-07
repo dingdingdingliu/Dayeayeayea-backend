@@ -100,23 +100,20 @@ const MembersController = {
     const { id } = req.params
     const { 
       fullname,
-      username,
       password,
-      email,
       level,
       address,
       phone,
     } = req.body
 
     try {
-      const _member = await Product.findByPk(id)
-      const hashPassword = bcrypt.hashSync(password, SALTROUNDS)
+      console.log(password)
+      const _member = await Member.findByPk(id)
+      const _password = password ? bcrypt.hashSync(password, SALTROUNDS) : _member.password
       await _member.update({
         id,
         fullname,
-        username,
-        password: hashPassword,
-        email,
+        password: _password,
         level,
         address,
         phone,
@@ -128,8 +125,8 @@ const MembersController = {
       })
 
     } catch (error) {
-      const { message } = error.errors[0]
-      return next(createError(401, message || 'Update Fail'))
+      console.log(error);
+      return next(createError(401, 'Update Fail'))
     }
 
   },

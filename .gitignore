@@ -3,3 +3,4 @@ config/config.json
 config.json
 .env
 .vscode
+/swagger.yaml

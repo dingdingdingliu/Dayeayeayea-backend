@@ -101,7 +101,6 @@ const orderController = {
         }
       })
       await _order.update({
-        memberId,
         status,
         isDeleted
       })

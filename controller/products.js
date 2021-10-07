@@ -33,11 +33,12 @@ const ProductsController = {
     }
   },
   getByPage: async (req, res, next) => { 
-    const { page } = req.params
+    let { page } = req.params
 
     try {
+      page = Number(page)
       const data = await Product.findAll()
-      if (data.length === 0) return next(createError(401, 'Data empty'))
+      if (data.length === 0 || page === 0) return next(createError(401, 'Data empty'))
 
       const totalPage = Math.floor(data.length / perPageProducts)
       if (page > totalPage) return next(createError(401, 'Over max page'))

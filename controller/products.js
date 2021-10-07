@@ -2,7 +2,7 @@ const db = require('../models')
 const { Product } = db
 const { Op } = require("sequelize")
 const createError = require('http-errors')
-const perPageProducts = process.env.PER_PAGE_PRODUCTS
+const perPageProducts = process.env.PER_PAGE_PRODUCTS || 5
 
 
 const ProductsController = {
@@ -33,15 +33,13 @@ const ProductsController = {
     }
   },
   getByPage: async (req, res, next) => { 
-    let { page } = req.params
+    const { page } = req.params
 
     try {
-      page = Number(page)
       const data = await Product.findAll()
-      if (data.length === 0 || page === 0) return next(createError(401, 'Data empty'))
-
       const totalPage = Math.floor(data.length / perPageProducts)
-      if (page > totalPage) return next(createError(401, 'Over max page'))
+      if (data.length === 0 || page > totalPage) return next(createError(401, 'Incorrect Page'))
+
       const _data = data.slice((page - 1) * perPageProducts, (page - 1) * perPageProducts + perPageProducts)
 
       return res.status(200).json({
@@ -49,7 +47,7 @@ const ProductsController = {
         currentPage: page,
         totalPage,
         perPageProducts,
-        _data
+        data: _data
       })
 
     } catch (error) {
@@ -108,8 +106,7 @@ const ProductsController = {
       return next(createError(401, 'Add product fail'))
   
     } catch (error) {
-      const { message } = error.errors[0]
-      return next(createError(401, message || 'Add product fail'))
+      return next(createError(401, 'Add product fail'))
     }
   },
   updateOne: async (req, res, next) => {
@@ -150,8 +147,7 @@ const ProductsController = {
       })
 
     } catch (error) {
-      const { message } = error.errors[0]
-      return next(createError(401, message || 'Update product fail'))
+      return next(createError(401, 'Update product fail'))
     }
     
   },

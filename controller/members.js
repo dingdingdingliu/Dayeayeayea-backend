@@ -2,7 +2,7 @@ const db = require('../models')
 const { Member } = db
 
 const bcrypt = require('bcrypt')
-const SALTROUNDS = Number(process.env.SALTROUNDS)
+const SALTROUNDS = Number(process.env.SALTROUNDS || 10)
 const { createToken } = require('../utils/auth')
 const createError = require('http-errors')
 
@@ -92,8 +92,7 @@ const MembersController = {
       })
 
     } catch (error) {
-      const { message } = error.errors[0]
-      return next(createError(401, message || 'Register Fail'))
+      return next(createError(401, 'Register Fail'))
     }
   },
   updateOne: async (req, res, next) => {

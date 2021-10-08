@@ -14,15 +14,14 @@ const verifyToken = (token) => {
   )
 }
 
-const getUserId = (token) => {
-  const { id } = jwt.verify(token, SECRET)
-  return id
+const getUserByToken = (token) => {
+  const user = jwt.verify(token, SECRET)
+  return user
 }
-
 
 
 module.exports = {
   createToken,
   verifyToken,
-  getUserId
+  getUserByToken
 }

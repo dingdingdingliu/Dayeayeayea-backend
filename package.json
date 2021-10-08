@@ -8,23 +8,27 @@
     "cors": "^2.8.5",
     "dotenv": "^10.0.0",
     "express": "^4.17.1",
+    "file-stream-rotator": "^0.5.7",
     "http-errors": "~1.6.3",
     "jsonwebtoken": "^8.5.1",
     "morgan": "~1.9.1",
     "mysql2": "^2.3.0",
-    "sequelize": "^6.6.5"
+    "sequelize": "^6.6.5",
+    "swagger-jsdoc": "^6.1.0",
+    "swagger-ui-express": "^4.1.6",
+    "yamljs": "^0.3.0"
   },
   "devDependencies": {
     "nodemon": "^2.0.13",
     "sequelize-cli": "^6.2.0"
   },
   "scripts": {
-    "start": "node app.js",
-    "dev": "nodemon app.js",
+    "start": "node -r dotenv/config app.js",
+    "dev": "nodemon -r dotenv/config app.js",
     "test": "echo \"Error: no test specified\" && exit 1",
     "migrate": "npx sequelize-cli db:migrate",
     "get-test-data": "npx sequelize-cli db:seed:all",
-    "build": "npm run migrate && npm run get-test-data && node index.js"
+    "build": "npm run migrate && npm run get-test-data && node app.js"
   },
   "author": "",
   "license": "MIT"

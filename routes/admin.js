@@ -4,11 +4,18 @@ const Members = require('../controller/members')
 const { checkAuth } = require('../middlewares/authHandler')
 
 
-router.post('/', Members.addOne)
+router.get('/', async (req, res, next) => {
+  res.json({
+    data: {
+      pass: 'ok'
+    }
+  })
+})
 router.post('/login', Members.login)
-router.get('/', Members.getAll)
-router.get('/:id([0-9]+)', checkAuth, Members.getOne)
-router.patch('/:id([0-9]+)', checkAuth, Members.updateOne)
-router.delete('/:id([0-9]+)', checkAuth, Members.deleteOne)
+
+router.use(checkAuth)
+router.get('/:id([0-9]+)', Members.getOne)
+router.patch('/:id([0-9]+)', Members.updateOne)
+router.delete('/:id([0-9]+)', Members.deleteOne)
 
 module.exports = router

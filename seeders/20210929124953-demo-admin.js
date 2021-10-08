@@ -7,13 +7,13 @@ module.exports = {
     return queryInterface.bulkInsert('Admins', [
       {
         username: 'admin01',
-        password: bcrypt.hashSync('12345678', saltRounds),
+        password: '$2b$10$ZYyrpzKeU2S0O8awe/kZweA3zDpz5ubzeN2w8cRjCmskaW9KRwoXm',
         createdAt: new Date(),
         updatedAt: new Date(),
       },
       {
         username: 'admin02',
-        password: bcrypt.hashSync('12345678', saltRounds),
+        password: '$2b$10$o6xFu5MRX2eCdjMUO9/ES.diJrdS1gHfTCJYEztsONRj6xTnhTRoq',
         createdAt: new Date(),
         updatedAt: new Date(),
       },

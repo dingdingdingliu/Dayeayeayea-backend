@@ -13,9 +13,10 @@ const checkAuth = (req, res, next) => {
     if (verifyTokenResult instanceof Error) {
       return next(createError(401, 'Access token not provided'))
     }
-    const { id, email } = getUserByToken(authorization.split(' ')[1])
+    const { id, username, email } = getUserByToken(authorization.split(' ')[1])
     req.auth = {
       memberId: id,
+      username,
       email
     }
 

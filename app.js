@@ -1,10 +1,11 @@
 const express = require('express')
-const logger = require('morgan')
 const createError = require('http-errors')
+const logger = require('./middlewares/logger')
+const corsHandler = require('./middlewares/corsHandler')
 const errorHandler = require('./middlewares/errorHandler')
 const swaggerUi = require('swagger-ui-express')
 const YAML = require('yamljs')
-const swaggerDocument = YAML.load('./swagger.yaml')
+const swaggerDocument = YAML.load('./config/swagger.yaml')
 
 const articlesRouter = require('./routes/articles')
 const membersRouter = require('./routes/members')
@@ -13,11 +14,12 @@ const productsRouter = require('./routes/products')
 const adminRouter = require('./routes/admin')
 const faqController = require('./controller/faq')
 
+
 const app = express()
 const port = process.env.PORT || 5000
 
-
-app.use(logger('dev'))
+app.use(logger)
+app.use(corsHandler)
 app.use(express.json())
 app.use(express.urlencoded({ extended: false }))
 
@@ -27,19 +29,13 @@ app.use('/orders', ordersRouter)
 app.use('/products', productsRouter)
 app.use('/faq', faqController.getAll)
 app.use('/admin', adminRouter)
-app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument))
 
-app.use(/\//, (req, res) => {
-  res.status(200).json({
-    ok: 1,
-    message: 'Hello Welcome DAYEAYEAYEA'
-  })
-})
-app.use('/*', (req, res, next) => {
-  next(createError(404))
-})
+if (process.env.NODE_ENV === 'development') {
+  app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument))
+}
+
+app.use(/\//, (req, res) => res.json({ ok: 1, message: 'Hello Welcome DAYEAYEAYEA' }))
+app.use('/*', (req, res, next) => next(createError(404)))
 app.use(errorHandler)
 
-app.listen(port, () => {
-  console.log(`DAYEAYEAYEA app listening on port ${port}!`)
-})
+app.listen(port, () => console.log(`DAYEAYEAYEA app listening on port ${port}!`))

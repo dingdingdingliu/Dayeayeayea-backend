@@ -1,141 +1,208 @@
 const db = require('../models')
 const { Product } = db
 const { Op } = require("sequelize")
+const createError = require('http-errors')
+const perPageProducts = process.env.PER_PAGE_PRODUCTS || 5
+
 
 const ProductsController = {
-  getAll: async (req, res) => {
+  getAll: async (req, res, next) => {
     const { search } = req.query
     
     let data = null
-    if (search) {
-      data = await Product.findAll({
-        where: {
-          name: {
-            [Op.like]: `%${search}%`
+    try {
+      if (search) {
+        data = await Product.findAll({
+          where: {
+            name: {
+              [Op.like]: `%${search}%`
+            }
           }
+        })
+      } else {
+        data = await Product.findAll()
+      }
+  
+      return res.status(200).json({
+        ok: 1,
+        data
+      })
+
+    } catch (error) {
+      return next(createError(401, 'Get products fail'))
+    }
+  },
+  getByPage: async (req, res, next) => { 
+    const { page } = req.params
+
+    try {
+      const data = await Product.findAll()
+      const totalPage = Math.floor(data.length / perPageProducts)
+      if (data.length === 0 || page > totalPage) return next(createError(401, 'Incorrect Page'))
+
+      const _data = data.slice((page - 1) * perPageProducts, (page - 1) * perPageProducts + perPageProducts)
+
+      return res.status(200).json({
+        ok: 1,
+        currentPage: page,
+        totalPage,
+        perPageProducts,
+        data: _data
+      })
+
+    } catch (error) {
+      return next(createError(401, 'Get products fail'))
+    }
+  },
+  getOne: async (req, res, next) => {
+    const { id } = req.params
+
+    try {
+      const data = await Product.findByPk(id)
+      if (!data) next(createError(401, 'Get product fail'))
+      return res.status(200).json({
+        ok: 1,
+        data
+      })
+
+    } catch (error) {
+      return next(createError(401, 'Get product fail'))
+    }
+  },
+  addOne: async (req, res, next) => {
+    const { 
+      name,
+      price,
+      discountPrice,
+      category,
+      quantity,
+      status,
+      shortDesc,
+      longDesc,
+      article,
+      isDeleted,
+    } = req.body
+
+    try {
+      const _product = await Product.create({
+        name,
+        price,
+        discountPrice,
+        category,
+        quantity,
+        status,
+        shortDesc,
+        longDesc,
+        article,
+        isDeleted,
+      })
+
+      if (_product) {
+        return res.status(201).json({
+          ok: 1,
+          message: 'Add product success',
+        })
+      }
+      return next(createError(401, 'Add product fail'))
+  
+    } catch (error) {
+      return next(createError(401, 'Add product fail'))
+    }
+  },
+  updateOne: async (req, res, next) => {
+    const { id } = req.params
+    const { 
+      name,
+      price,
+      discountPrice,
+      category,
+      quantity,
+      status,
+      shortDesc,
+      longDesc,
+      article,
+      isDeleted,
+    } = req.body
+
+    try {
+      const _product = await Product.findByPk(id)
+
+      await _product.update({
+        id,
+        name,
+        price,
+        discountPrice,
+        category,
+        quantity,
+        status,
+        shortDesc,
+        longDesc,
+        article,
+        isDeleted,
+      })
+
+      return res.status(200).json({
+        ok: 1,
+        message: 'Update product success'
+      })
+
+    } catch (error) {
+      return next(createError(401, 'Update product fail'))
+    }
+    
+  },
+  deleteOne: async (req, res, next) => {
+    const { id } = req.params
+    try {
+      const _product = await Product.findByPk(id)
+      _product.destroy()
+  
+      return res.status(200).json({
+        ok: 1,
+        message: 'Delete product success',
+      })
+
+    } catch (error) {
+      return next(createError(401, 'Delete product fail'))
+    }
+  },
+  getByCategory: async (req, res, next) => {
+    const { category } = req.params
+
+    try {
+      const _products = await Product.findAll({
+        where: {
+          category
         }
       })
-    } else {
-      data = await Product.findAll()
+      // return _products Array
+      return res.status(200).json({
+        ok: 1,
+        data: _products
+      })
+
+    } catch (error) {
+      return next(createError(401, 'Get product fail'))
     }
-
-    return res.status(200).json({
-      ok: 1,
-      data
-    })
   },
-  getOne: async (req, res) => {
-    const { id } = req.params
-    const data = await Product.findByPk(id)
-    return res.status(200).json({
-      ok: 1,
-      data
-    })
-  },
-  addOne: async (req, res) => {
-    const { 
-      name,
-      price,
-      discountPrice,
-      category,
-      quantity,
-      status,
-      shortDesc,
-      longDesc,
-      article,
-      isDeleted,
-    } = req.body
-
-    await Product.create({
-      name,
-      price,
-      discountPrice,
-      category,
-      quantity,
-      status,
-      shortDesc,
-      longDesc,
-      article,
-      isDeleted,
-    })
-
-    return res.status(200).json({
-      ok: 1,
-      message: 'success',
-    })
-
-  },
-  updateOne: async (req, res) => {
-    const { id } = req.params
-    const { 
-      name,
-      price,
-      discountPrice,
-      category,
-      quantity,
-      status,
-      shortDesc,
-      longDesc,
-      article,
-      isDeleted,
-    } = req.body
-
-    const _product = await Product.findByPk(id)
-
-    await _product.update({
-      id,
-      name,
-      price,
-      discountPrice,
-      category,
-      quantity,
-      status,
-      shortDesc,
-      longDesc,
-      article,
-      isDeleted,
-    })
-
-    return res.status(200).json({
-      ok: 1,
-      message: 'Update Success'
-    })
-  },
-  deleteOne: async (req, res) => {
-    const { id } = req.params
-    const _product = await Product.findByPk(id)
-    _product.destroy()
-
-    return res.status(200).json({
-      ok: 1,
-      message: 'success',
-    })
-  },
-  getByCategory: async (req, res) => {
-    const { category } = req.params
-    const _products = await Product.findAll({
-      where: {
-        category
-      }
-    })
-    // return _products Array
-    return res.status(200).json({
-      ok: 1,
-      data: _products
-    })
-  },
-  getByArticle: async (req, res) => {
+  getByArticle: async (req, res, next) => {
     const { article } = req.params
-    const _products = await Product.findAll({
-      where: {
-        article
-      }
-    })
-    // return _products Array
-    return res.status(200).json({
-      ok: 1,
-      data: _products
-    })
+
+    try {
+      const _products = await Product.findAll({
+        where: {
+          article
+        }
+      })
+      // return _products Array
+      return res.status(200).json({
+        ok: 1,
+        data: _products
+      })
+      
+    } catch (error) {
+      return next(createError(401, 'Get product fail'))
+    }
   }
 }
 

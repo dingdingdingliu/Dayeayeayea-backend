@@ -4,14 +4,15 @@ const Products = require('../controller/products')
 const { checkAuth } = require('../middlewares/authHandler')
 
 
+const categoryMatch = 'home|apparel|kitchenware|food|stationery|outdoor'
+const articleMatch = 'null|dining|fragrance|camping'
 // 搜尋商品 ?search=keyword
 router.get('/', Products.getAll)
 router.get('/:id([0-9]+)', Products.getOne)
 router.get('/page/:page([1-9]|[1-9][0-9]+)', Products.getByPage)
-router.get('/category/:category/:page([1-9]|[1-9][0-9])?', Products.getByCategory)
-// router.get('/category/:category', Products.getByCategoryPage)
-router.get('/article/:article/:page([1-9]|[1-9][0-9]+)?', Products.getByArticle)
-// router.get('/article/:article/:page([1-9]|[1-9][0-9]+)', Products.getByArticlePage)
+
+router.get(`/category/:category(${categoryMatch})/:page([1-9]|[1-9][0-9])?`, Products.getByCategory)
+router.get(`/article/:article(${articleMatch})/:page([1-9]|[1-9][0-9]+)?`, Products.getByArticle)
 
 router.use(checkAuth)
 router.post('/', Products.addOne)

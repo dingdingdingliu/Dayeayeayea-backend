@@ -15,5 +15,7 @@ router.use(checkAuth)
 router.post('/', Products.addOne)
 router.patch('/:id([0-9]+)', Products.updateOne)
 router.delete('/:id([0-9]+)', Products.deleteOne)
+router.patch('/imgs/:id([0-9]+)', Products.updateImgs)
+router.delete('/imgs/:id([0-9]+)', Products.deleteImgs)
 
 module.exports = router

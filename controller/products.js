@@ -2,7 +2,7 @@ const db = require('../models')
 const { Product, Product_img } = db
 const { Op } = require("sequelize")
 const createError = require('http-errors')
-const perPageProducts = process.env.PER_PAGE_PRODUCTS || 5
+const perPageProducts = Number(process.env.PER_PAGE_PRODUCTS) || 5
 
 
 const ProductsController = {
@@ -41,30 +41,105 @@ const ProductsController = {
     }
   },
   getByPage: async (req, res, next) => { 
-    const { page } = req.params
+    const page = Number(req.params.page)
 
     try {
-      const data = await Product.findAll({
+      const _products = await Product.findAll({
         where: {
           isDeleted: 0
         },
         include : Product_img
       })
-      const totalPage = Math.floor(data.length / perPageProducts)
-      if (data.length === 0 || page > totalPage) return next(createError(401, 'Incorrect Page'))
+      const totalPage = Math.ceil(_products.length / perPageProducts)
+      if (page > totalPage) return next(createError(401, 'Exceeded the maximum number of pages'))
 
-      const _data = data.slice((page - 1) * perPageProducts, (page - 1) * perPageProducts + perPageProducts)
+      const data = _products.slice((page - 1) * perPageProducts, (page - 1) * perPageProducts + perPageProducts)
 
       return res.status(200).json({
         ok: 1,
+        type: 'All',
         currentPage: page,
+        totalPage,
+        perPageProducts,
+        data
+      })
+
+    } catch (error) {
+      return next(createError(401, 'Get products fail'))
+    }
+  },
+  getByCategory: async (req, res, next) => {
+    const { category, page } = req.params
+
+    try {
+      const _products = await Product.findAll({
+        where: {
+          category,
+          isDeleted: 0
+        },
+        include : Product_img
+      })
+      if (!page) {
+        return res.status(200).json({
+          ok: 1,
+          data: _products,
+        })
+      }
+
+      const _page = Number(page)
+      const totalPage = Math.ceil(_products.length / perPageProducts)
+      if (_page > totalPage) return next(createError(401, 'Exceeded the maximum number of pages'))
+
+      const _data = _products.slice((_page - 1) * perPageProducts, (_page - 1) * perPageProducts + perPageProducts)
+
+      return res.status(200).json({
+        ok: 1,
+        type: 'category',
+        currentPage: _page,
         totalPage,
         perPageProducts,
         data: _data
       })
 
     } catch (error) {
-      return next(createError(401, 'Get products fail'))
+      return next(createError(401, 'Get product fail'))
+    }
+  },
+  getByArticle: async (req, res, next) => {
+    const { article, page } = req.params
+
+    try {
+      const _products = await Product.findAll({
+        where: {
+          article,
+          isDeleted: 0
+        },
+        include : Product_img
+      })
+      if (!page) {
+        return res.status(200).json({
+          ok: 1,
+          data: _products,
+        })
+      }
+
+      const _page = Number(page)
+      const totalPage = Math.ceil(_products.length / perPageProducts)
+      if (_page > totalPage) return next(createError(401, 'Exceeded the maximum number of pages'))
+
+      const _data = _products.slice((_page - 1) * perPageProducts, (_page - 1) * perPageProducts + perPageProducts)
+
+      return res.status(200).json({
+        ok: 1,
+        type: 'category',
+        currentPage: _page,
+        totalPage,
+        perPageProducts,
+        data: _data
+      })
+      
+    } catch (error) {
+      return next(createError(401, 'Get product fail'))
     }
   },
   getOne: async (req, res, next) => {
@@ -240,45 +315,6 @@ const ProductsController = {
 
     } catch (error) {
       return next(createError(401, 'Delete product_imgs fail'))
-    }
-  },
-  getByCategory: async (req, res, next) => {
-    const { category } = req.params
-
-    try {
-      const _products = await Product.findAll({
-        where: {
-          category
-        },
-        include : Product_img
-      })
-      // return _products Array
-      return res.status(200).json({
-        ok: 1,
-        data: _products
-      })
-
-    } catch (error) {
-      return next(createError(401, 'Get product fail'))
-    }
-  },
-  getByArticle: async (req, res, next) => {
-    const { article } = req.params
-
-    try {
-      const _products = await Product.findAll({
-        where: {
-          article
-        },
-        include : Product_img
-      })
-      return res.status(200).json({
-        ok: 1,
-        data: _products
-      })
-      
-    } catch (error) {
-      return next(createError(401, 'Get product fail'))
     }
   }
 }

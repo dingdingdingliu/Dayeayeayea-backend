@@ -11,6 +11,7 @@ morgan.format('ozne', ':date[Asia/Taipei] -- :status - :access - :method :url :r
 const logStream = rt.getStream({
   filename:"./log/access.log",
   frequency:"daily",
+  utc: false,
   verbose: true
 })
 

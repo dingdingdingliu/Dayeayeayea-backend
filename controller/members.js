@@ -1,5 +1,5 @@
 const db = require('../models')
-const { Member } = db
+const { Member, Order } = db
 
 const bcrypt = require('bcrypt')
 const SALTROUNDS = Number(process.env.SALTROUNDS || 10)
@@ -37,7 +37,9 @@ const MembersController = {
   },
   getAll: async (req, res, next) => {
     try {
-      const data = await Member.findAll()
+      const data = await Member.findAll({
+        include : Order
+      })
       return res.status(200).json({
         ok: 1,
         data
@@ -51,7 +53,12 @@ const MembersController = {
     const { id } = req.params
 
     try {
-      const data = await Member.findByPk(id)
+      const data = await Member.findOne({
+        where: {
+          id
+        },
+        include : Order
+      })
       if (data) {
         return res.status(200).json({
           ok: 1,

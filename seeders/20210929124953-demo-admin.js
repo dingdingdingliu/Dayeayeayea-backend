@@ -7,13 +7,13 @@ module.exports = {
     return queryInterface.bulkInsert('Admins', [
       {
         username: 'admin01',
-        password: '$2b$10$ZYyrpzKeU2S0O8awe/kZweA3zDpz5ubzeN2w8cRjCmskaW9KRwoXm',
+        password: '$2a$12$qQm8773wSmcJMucub6CTZeXPTEx.I/MgZttjYxYHRcxJhZEBLBLvu',
         createdAt: new Date(),
         updatedAt: new Date(),
       },
       {
         username: 'admin02',
-        password: '$2b$10$o6xFu5MRX2eCdjMUO9/ES.diJrdS1gHfTCJYEztsONRj6xTnhTRoq',
+        password: '$2a$12$QvsURR7WE4iCghulvb3MauTDXrqJ5c0OyG4t6fdaEPCjQAJz/mY.O',
         createdAt: new Date(),
         updatedAt: new Date(),
       },

@@ -27,6 +27,29 @@ const checkAuth = (req, res, next) => {
 }
 
 
+const checkAdmin = (req, res, next) => {
+  const { authorization } = req.headers
+  if (authorization === undefined || authorization.split(' ')[0] !== 'Bearer') throw Error
+
+  const token = authorization.split(' ')[1]
+  try {
+    const verifyTokenResult = verifyToken(token)
+    if (verifyTokenResult instanceof Error) throw Error
+    const { username, role } = getUserByToken(authorization.split(' ')[1])
+
+    if (!username || role !== 'supervisor') throw Error
+    req.admin = {
+      username,
+      role
+    }
+  } catch (err) {
+    return next(createError(401, 'Permission not granted'))
+  }
+  next()
+}
+
+
 module.exports = {
-  checkAuth
+  checkAuth,
+  checkAdmin
 }

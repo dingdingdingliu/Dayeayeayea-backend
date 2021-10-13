@@ -51,12 +51,12 @@ const MembersController = {
   },
   getOne: async (req, res, next) => {
     const { id } = req.params
+    const { memberId } = req.auth
+    const where = id ? { id } : { id: memberId }
 
     try {
       const data = await Member.findOne({
-        where: {
-          id
-        },
+        where,
         include : Order
       })
       if (data) {
@@ -104,6 +104,8 @@ const MembersController = {
   },
   updateOne: async (req, res, next) => {
     const { id } = req.params
+    const { memberId } = req.auth
+    const where = id ? { id } : { id: memberId }
     const { 
       fullname,
       password,
@@ -113,8 +115,7 @@ const MembersController = {
     } = req.body
 
     try {
-      console.log(password)
-      const _member = await Member.findByPk(id)
+      const _member = await Member.fineOne({ where })
       const _password = password ? bcrypt.hashSync(password, SALTROUNDS) : _member.password
       await _member.update({
         id,

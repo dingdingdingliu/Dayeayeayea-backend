@@ -144,7 +144,6 @@ const ProductsController = {
   },
   getOne: async (req, res, next) => {
     const { id } = req.params
-    console.log(id)
 
     try {
       const data = await Product.findOne({

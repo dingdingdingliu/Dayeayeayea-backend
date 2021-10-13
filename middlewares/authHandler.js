@@ -38,7 +38,7 @@ const checkAdmin = (req, res, next) => {
     const { username, role } = getUserByToken(authorization.split(' ')[1])
 
     if (!username || role !== 'supervisor') throw Error
-    req.admin = {
+    req.auth = {
       username,
       role
     }

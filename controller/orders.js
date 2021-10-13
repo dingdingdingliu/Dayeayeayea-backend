@@ -18,15 +18,11 @@ const orderController = {
   },
   getOne: async (req, res, next) => {
     const { id } = req.params
-    const { memberId } = req.auth
+    const { memberId, role } = req.auth
+    const where = role ? { id } : { id, memberId }
 
     try {
-      const data = await Order.findOne({
-        where: {
-          id,
-          memberId
-        }
-      })
+      const data = await Order.findOne({ where })
       if (data) {
         return res.status(200).json({
           ok: 1,
@@ -87,19 +83,16 @@ const orderController = {
   },
   updateOne: async (req, res, next) => {
     const { id } = req.params
-    const { memberId } = req.auth
+    const { memberId, role } = req.auth
+    const where = role ? { id } : { id, memberId }
+
     const { 
       status,
       isDeleted
     } = req.body
 
     try {
-      const _order = await Order.findOne({
-        where: {
-          id,
-          memberId
-        }
-      })
+      const _order = await Order.findOne({ where })
       await _order.update({
         status,
         isDeleted
@@ -116,7 +109,9 @@ const orderController = {
   },
   updateStatus: async (req, res, next) => {
     const { id, action } = req.params
-    const { memberId } = req.auth
+    const { memberId, role } = req.auth
+    const where = role ? { id } : { id, memberId }
+
     const orderAction = {
       normal: '處理中',
       cancel: '已取消',
@@ -125,12 +120,7 @@ const orderController = {
     }
 
     try {
-      const _order = await Order.findOne({
-        where: {
-          id,
-          memberId
-        }
-      })
+      const _order = await Order.findOne({ where })
       if (!_order) return next(createError(401, 'Update order status fail'))
       console.log(_order)
 
@@ -150,15 +140,11 @@ const orderController = {
   },
   deleteOne: async (req, res, next) => {
     const { id } = req.params
-    const { memberId } = req.auth
+    const { memberId, role } = req.auth
+    const where = role ? { id } : { id, memberId }
 
     try {
-      const _order = await Order.findOne({
-        where: {
-          id,
-          memberId
-        }
-      })
+      const _order = await Order.findOne({ where })
       await _order.update({
         isDeleted: true
       })

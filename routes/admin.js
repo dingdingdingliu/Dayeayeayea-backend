@@ -4,6 +4,7 @@ const Admin = require('../controller/admins')
 const Members = require('../controller/members')
 const Products = require('../controller/products')
 const Orders = require('../controller/orders')
+const Articles = require('../controller/articles')
 const { checkAdmin } = require('../middlewares/authHandler')
 
 
@@ -28,5 +29,11 @@ router.get('/orders/:id([0-9]+)', Orders.getOne)
 router.patch('/orders/:id([0-9]+)', Orders.updateOne)
 router.patch('/orders/:id([0-9]+)/:action(normal|cancel|ship|complete)', Orders.updateStatus)
 router.delete('/orders/:id([0-9]+)', Orders.deleteOne)
+
+router.get('/articles', Articles.getAll)
+router.post('/articles', Articles.addOne)
+router.get('/articles/:id([0-9]+)', Articles.getOne)
+router.patch('/articles/:id([0-9]+)', Articles.updateOne)
+router.delete('/articles/:id([0-9]+)', Articles.deleteOne)
 
 module.exports = router

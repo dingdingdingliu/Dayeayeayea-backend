@@ -1,5 +1,5 @@
 const db = require('../models')
-const { Member } = db
+const { Member, Order } = db
 
 const bcrypt = require('bcrypt')
 const SALTROUNDS = Number(process.env.SALTROUNDS || 10)
@@ -37,7 +37,9 @@ const MembersController = {
   },
   getAll: async (req, res, next) => {
     try {
-      const data = await Member.findAll()
+      const data = await Member.findAll({
+        include : Order
+      })
       return res.status(200).json({
         ok: 1,
         data
@@ -49,9 +51,14 @@ const MembersController = {
   },
   getOne: async (req, res, next) => {
     const { id } = req.params
+    const { memberId } = req.auth
+    const where = id ? { id } : { id: memberId }
 
     try {
-      const data = await Member.findByPk(id)
+      const data = await Member.findOne({
+        where,
+        include : Order
+      })
       if (data) {
         return res.status(200).json({
           ok: 1,
@@ -97,6 +104,8 @@ const MembersController = {
   },
   updateOne: async (req, res, next) => {
     const { id } = req.params
+    const { memberId } = req.auth
+    const where = id ? { id } : { id: memberId }
     const { 
       fullname,
       password,
@@ -106,8 +115,7 @@ const MembersController = {
     } = req.body
 
     try {
-      console.log(password)
-      const _member = await Member.findByPk(id)
+      const _member = await Member.fineOne({ where })
       const _password = password ? bcrypt.hashSync(password, SALTROUNDS) : _member.password
       await _member.update({
         id,

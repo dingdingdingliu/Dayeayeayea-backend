@@ -11,6 +11,8 @@ module.exports = {
         orderName: '劉叮叮',
         orderEmail: 'jj@gamil.com',
         orderPhone: '0987654321',
+        payment: '信用卡',
+        shipping: '宅配',
         createdAt: new Date(),
         updatedAt: new Date()
       },
@@ -22,6 +24,8 @@ module.exports = {
         orderName: '林賈姬',
         orderEmail: 'hh@gamil.com',
         orderPhone: '0912345678',
+        payment: '貨到付款',
+        shipping: '宅配',
         createdAt: new Date(),
         updatedAt: new Date()
       },
@@ -33,6 +37,8 @@ module.exports = {
         orderName: 'Chris Martin',
         orderEmail: 'coldplay@gamil.com',
         orderPhone: '0911333555',
+        payment: '信用卡',
+        shipping: '宅配',
         createdAt: new Date(),
         updatedAt: new Date()
       },
@@ -44,6 +50,8 @@ module.exports = {
         orderName: '杜振熙',
         orderEmail: 'softlipa@gamil.com',
         orderPhone: '0922444666',
+        payment: '貨到付款',
+        shipping: '宅配',
         createdAt: new Date(),
         updatedAt: new Date()
       }

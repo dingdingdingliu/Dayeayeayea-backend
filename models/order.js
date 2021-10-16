@@ -11,11 +11,10 @@ module.exports = (sequelize, DataTypes) => {
       Order.belongsTo(models.Member, {
         foreignKey: 'memberId',
       })
-      Order.hasMany(models.Message, {
+      Order.hasMany(models.Order_item, {
         foreignKey: 'orderId',
       })
-      Order.belongsToMany(models.Product, {
-        through: models.Order_item,
+      Order.hasMany(models.Message, {
         foreignKey: 'orderId',
       })
     }

@@ -1,12 +1,24 @@
 const db = require('../models')
-const { Order } = db
+const { Order, Order_item, Member, Product, Product_img, Message } = db
 const createError = require('http-errors')
 
 
 const orderController = {
   getAll: async (req, res, next) => {
     try {
-      const data = await Order.findAll()
+      const data = await Order.findAll({
+        include: [
+          {
+            model: Order_item,
+            include: {
+              model: Product
+            }
+          },
+          {
+            model: Member
+          }
+        ]
+      })
       return res.status(200).json({
         ok: 1,
         data
@@ -22,7 +34,10 @@ const orderController = {
     const where = role ? { id } : { id, memberId }
 
     try {
-      const data = await Order.findOne({ where })
+      const data = await Order.findOne({ 
+        where,
+        include: Order_item
+      })
       if (data) {
         return res.status(200).json({
           ok: 1,
@@ -37,20 +52,42 @@ const orderController = {
   },
   getOneByUser: async (req, res, next) => {
     const { memberId } = req.auth
+    console.log('Hi ', memberId);
 
     try {
       const data = await Order.findAll({
         where: {
           memberId
-        }
+        },
+        include: [
+          {
+            model: Member
+          },
+          {
+            model: Order_item,
+            include: [
+              {
+                model: Product,
+                include: Product_img
+              }
+            ]
+          },
+          {
+            model: Message
+          }
+        ]
       })
-  
-      return res.status(200).json({
-        ok: 1,
-        data
-      })
+      
+      if (data) {
+        return res.status(200).json({
+          ok: 1,
+          data
+        })
+      }
+      return next(createError(401, 'Get order fail'))
 
     } catch (error) {
+      console.log(error)
       return next(createError(401, 'Get order fail'))
     }
   },

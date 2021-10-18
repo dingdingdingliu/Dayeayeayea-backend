@@ -1,5 +1,5 @@
 const db = require('../models')
-const { Order, Order_item, Member, Product, Product_img, Message } = db
+const { Order, Order_item, Member, Product, Product_img, Message, Admin } = db
 const createError = require('http-errors')
 
 
@@ -9,13 +9,36 @@ const orderController = {
       const data = await Order.findAll({
         include: [
           {
-            model: Order_item,
-            include: {
-              model: Product
-            }
+            model: Member,
+            attributes: ['fullname', 'username', 'email', 'address', 'phone']
           },
           {
-            model: Member
+            model: Order_item,
+            attributes: ['productId', 'quantity'],
+            include: [
+              {
+                model: Product,
+                include: [
+                  {
+                    model: Product_img,
+                    attributes: ['id','imgUrlSm', 'imgUrlMd', 'imgUrlLg']
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            model: Message,
+            include: [
+              {
+                model: Member,
+                attributes: ['fullname', 'username', 'email', 'address', 'phone']
+              },
+              {
+                model: Admin,
+                attributes: ['username']
+              }
+            ]
           }
         ]
       })
@@ -36,7 +59,40 @@ const orderController = {
     try {
       const data = await Order.findOne({ 
         where,
-        include: Order_item
+        include: [
+          {
+            model: Member,
+            attributes: ['fullname', 'username', 'email', 'address', 'phone']
+          },
+          {
+            model: Order_item,
+            attributes: ['productId', 'quantity'],
+            include: [
+              {
+                model: Product,
+                include: [
+                  {
+                    model: Product_img,
+                    attributes: ['id','imgUrlSm', 'imgUrlMd', 'imgUrlLg']
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            model: Message,
+            include: [
+              {
+                model: Member,
+                attributes: ['fullname', 'username', 'email', 'address', 'phone']
+              },
+              {
+                model: Admin,
+                attributes: ['username']
+              }
+            ]
+          }
+        ]
       })
       if (data) {
         return res.status(200).json({
@@ -61,19 +117,36 @@ const orderController = {
         },
         include: [
           {
-            model: Member
+            model: Member,
+            attributes: ['fullname', 'username', 'email', 'address', 'phone']
           },
           {
             model: Order_item,
+            attributes: ['productId', 'quantity'],
             include: [
               {
                 model: Product,
-                include: Product_img
+                include: [
+                  {
+                    model: Product_img,
+                    attributes: ['id','imgUrlSm', 'imgUrlMd', 'imgUrlLg']
+                  }
+                ]
               }
             ]
           },
           {
-            model: Message
+            model: Message,
+            include: [
+              {
+                model: Member,
+                attributes: ['fullname', 'username', 'email', 'address', 'phone']
+              },
+              {
+                model: Admin,
+                attributes: ['username']
+              }
+            ]
           }
         ]
       })

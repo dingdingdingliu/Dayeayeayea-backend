@@ -20,7 +20,7 @@ const ProductsController = {
         data = await Product.findAll({
           where: {
             name: {
-              [Op.or]: searchList
+              [Op.and]: searchList
             },
             isDeleted: 0
           },

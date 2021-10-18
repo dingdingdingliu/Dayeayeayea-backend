@@ -106,9 +106,8 @@ const orderController = {
       return next(createError(401, 'Get order fail'))
     }
   },
-  getOneByUser: async (req, res, next) => {
+  getAllByUser: async (req, res, next) => {
     const { memberId } = req.auth
-    console.log('Hi ', memberId);
 
     try {
       const data = await Order.findAll({
@@ -169,14 +168,30 @@ const orderController = {
 
     const { 
       status,
-      isDeleted
+      isDeleted,
+      orderAddress,
+      orderName,
+      orderEmail,
+      orderPhone,
+      payment,
+      shipping,
+      orderItem
     } = req.body
 
     try {
       const _order = await Order.create({
         memberId,
         status,
-        isDeleted
+        isDeleted,
+        orderAddress,
+        orderName,
+        orderEmail,
+        orderPhone,
+        payment,
+        shipping,
+        Order_items: orderItem
+      }, {
+        include : Order_item
       })
 
       if (_order) {

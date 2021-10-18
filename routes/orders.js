@@ -6,7 +6,7 @@ const { checkAuth } = require('../middlewares/authHandler')
 
 router.use(checkAuth)
 router.post('/', Orders.addOne)
-router.get('/me', Orders.getOneByUser)
+router.get('/me', Orders.getAllByUser)
 router.get('/me/:id([0-9]+)', Orders.getOne)
 router.patch('/me/:id([0-9]+)/:action(cancel)', Orders.updateStatus)
 

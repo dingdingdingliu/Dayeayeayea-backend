@@ -30,9 +30,7 @@ app.use('/products', productsRouter)
 app.use('/faq', faqController.getAll)
 app.use('/admin', adminRouter)
 
-if (process.env.NODE_ENV === 'development') {
-  app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument))
-}
+app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument))
 
 app.use(/\//, (req, res) => res.json({ ok: 1, message: 'Welcome DAYEAYEAYEA' }))
 app.use('/*', (req, res, next) => next(createError(404)))

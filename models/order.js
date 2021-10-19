@@ -11,11 +11,10 @@ module.exports = (sequelize, DataTypes) => {
       Order.belongsTo(models.Member, {
         foreignKey: 'memberId',
       })
-      Order.hasMany(models.Message, {
+      Order.hasMany(models.Order_item, {
         foreignKey: 'orderId',
       })
-      Order.belongsToMany(models.Product, {
-        through: models.Order_item,
+      Order.hasMany(models.Message, {
         foreignKey: 'orderId',
       })
     }
@@ -25,6 +24,12 @@ module.exports = (sequelize, DataTypes) => {
       memberId: DataTypes.INTEGER,
       status: DataTypes.ENUM('處理中', '已出貨', '已取消', '已完成'),
       isDeleted: DataTypes.INTEGER,
+      orderAddress: DataTypes.STRING(512),
+      orderName: DataTypes.STRING,
+      orderEmail: DataTypes.STRING,
+      orderPhone: DataTypes.STRING,
+      payment: DataTypes.ENUM('信用卡', '貨到付款'),
+      shipping: DataTypes.ENUM('宅配', '超商'),
     },
     {
       sequelize,

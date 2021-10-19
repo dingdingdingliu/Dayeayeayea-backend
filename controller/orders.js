@@ -1,12 +1,47 @@
 const db = require('../models')
-const { Order } = db
+const { Order, Order_item, Member, Product, Product_img, Message, Admin } = db
 const createError = require('http-errors')
 
 
 const orderController = {
   getAll: async (req, res, next) => {
     try {
-      const data = await Order.findAll()
+      const data = await Order.findAll({
+        include: [
+          {
+            model: Member,
+            attributes: ['fullname', 'username', 'email', 'address', 'phone']
+          },
+          {
+            model: Order_item,
+            attributes: ['productId', 'quantity'],
+            include: [
+              {
+                model: Product,
+                include: [
+                  {
+                    model: Product_img,
+                    attributes: ['id','imgUrlSm', 'imgUrlMd', 'imgUrlLg']
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            model: Message,
+            include: [
+              {
+                model: Member,
+                attributes: ['fullname', 'username', 'email', 'address', 'phone']
+              },
+              {
+                model: Admin,
+                attributes: ['username']
+              }
+            ]
+          }
+        ]
+      })
       return res.status(200).json({
         ok: 1,
         data
@@ -22,7 +57,43 @@ const orderController = {
     const where = role ? { id } : { id, memberId }
 
     try {
-      const data = await Order.findOne({ where })
+      const data = await Order.findOne({ 
+        where,
+        include: [
+          {
+            model: Member,
+            attributes: ['fullname', 'username', 'email', 'address', 'phone']
+          },
+          {
+            model: Order_item,
+            attributes: ['productId', 'quantity'],
+            include: [
+              {
+                model: Product,
+                include: [
+                  {
+                    model: Product_img,
+                    attributes: ['id','imgUrlSm', 'imgUrlMd', 'imgUrlLg']
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            model: Message,
+            include: [
+              {
+                model: Member,
+                attributes: ['fullname', 'username', 'email', 'address', 'phone']
+              },
+              {
+                model: Admin,
+                attributes: ['username']
+              }
+            ]
+          }
+        ]
+      })
       if (data) {
         return res.status(200).json({
           ok: 1,
@@ -35,22 +106,60 @@ const orderController = {
       return next(createError(401, 'Get order fail'))
     }
   },
-  getOneByUser: async (req, res, next) => {
+  getAllByUser: async (req, res, next) => {
     const { memberId } = req.auth
 
     try {
       const data = await Order.findAll({
         where: {
           memberId
-        }
+        },
+        include: [
+          {
+            model: Member,
+            attributes: ['fullname', 'username', 'email', 'address', 'phone']
+          },
+          {
+            model: Order_item,
+            attributes: ['productId', 'quantity'],
+            include: [
+              {
+                model: Product,
+                include: [
+                  {
+                    model: Product_img,
+                    attributes: ['id','imgUrlSm', 'imgUrlMd', 'imgUrlLg']
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            model: Message,
+            include: [
+              {
+                model: Member,
+                attributes: ['fullname', 'username', 'email', 'address', 'phone']
+              },
+              {
+                model: Admin,
+                attributes: ['username']
+              }
+            ]
+          }
+        ]
       })
-  
-      return res.status(200).json({
-        ok: 1,
-        data
-      })
+      
+      if (data) {
+        return res.status(200).json({
+          ok: 1,
+          data
+        })
+      }
+      return next(createError(401, 'Get order fail'))
 
     } catch (error) {
+      console.log(error)
       return next(createError(401, 'Get order fail'))
     }
   },
@@ -59,14 +168,30 @@ const orderController = {
 
     const { 
       status,
-      isDeleted
+      isDeleted,
+      orderAddress,
+      orderName,
+      orderEmail,
+      orderPhone,
+      payment,
+      shipping,
+      orderItem
     } = req.body
 
     try {
       const _order = await Order.create({
         memberId,
         status,
-        isDeleted
+        isDeleted,
+        orderAddress,
+        orderName,
+        orderEmail,
+        orderPhone,
+        payment,
+        shipping,
+        Order_items: orderItem
+      }, {
+        include : Order_item
       })
 
       if (_order) {

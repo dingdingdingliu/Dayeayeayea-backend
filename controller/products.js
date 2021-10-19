@@ -8,15 +8,15 @@ const perPageProducts = Number(process.env.PER_PAGE_PRODUCTS) || 5
 const ProductsController = {
   getAll: async (req, res, next) => {
     const { search } = req.query
-
-    const searchList = search.split('+').reduce((obj, str) => {
-      if (str) obj.push({ [Op.like]: `%${str}%` })
-      return obj
-    }, [])
     
     let data = null
     try {
       if (search) {
+        const searchList = search.split('+').reduce((obj, str) => {
+          if (str) obj.push({ [Op.like]: `%${str}%` })
+          return obj
+        }, [])
+        
         data = await Product.findAll({
           where: {
             name: {

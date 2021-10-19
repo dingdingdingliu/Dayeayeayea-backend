@@ -191,7 +191,7 @@ const orderController = {
         shipping,
         Order_items: orderItem
       }, {
-        include : Order_item
+        include: Order_item
       })
 
       if (_order) {

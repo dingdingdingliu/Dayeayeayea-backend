@@ -5,6 +5,7 @@ module.exports = {
     return queryInterface.bulkInsert('Orders', [
       {
         memberId: 1,
+        ticketNo: '20210929-c19eea58-20e6',
         status: '處理中',
         isDeleted: 0,
         orderAddress: '台北市文山區指南路二段64號',
@@ -18,6 +19,7 @@ module.exports = {
       },
       {
         memberId: 2,
+        ticketNo: '20210929-6a7e2acd-d7bb',
         status: '已出貨',
         isDeleted: 0,
         orderAddress: '台北市中正區忠孝西路一段118號',
@@ -31,6 +33,7 @@ module.exports = {
       },
       {
         memberId: 3,
+        ticketNo: '20210929-63eb9b03-f0bb',
         status: '已取消',
         isDeleted: 0,
         orderAddress: '台北市松山區南京東路四段2號',
@@ -44,6 +47,7 @@ module.exports = {
       },
       {
         memberId: 4,
+        ticketNo: '20210929-b3969f9f-edd6',
         status: '已完成',
         isDeleted: 0,
         orderAddress: '新北市中和區中山路2段64巷36號7樓',

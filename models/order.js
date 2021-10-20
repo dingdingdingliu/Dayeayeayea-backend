@@ -22,6 +22,7 @@ module.exports = (sequelize, DataTypes) => {
   Order.init(
     {
       memberId: DataTypes.INTEGER,
+      ticketNo: DataTypes.STRING,
       status: DataTypes.ENUM('處理中', '已出貨', '已取消', '已完成'),
       isDeleted: DataTypes.INTEGER,
       orderAddress: DataTypes.STRING(512),

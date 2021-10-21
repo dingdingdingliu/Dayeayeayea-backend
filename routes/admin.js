@@ -25,7 +25,7 @@ router.patch('/products/imgs/:id([0-9]+)', Products.updateImgs)
 router.delete('/products/imgs/:id([0-9]+)', Products.deleteImgs)
 
 router.get('/orders', Orders.getAll)
-router.get('/orders/:ticket', Orders.getOneById)
+router.get('/orders/:ticket', Orders.getOneByTicket)
 router.patch('/orders/:ticket', Orders.updateOne)
 router.patch('/orders/:ticket/:action(normal|cancel|ship|complete)', Orders.updateStatus)
 router.delete('/orders/:ticket', Orders.deleteOne)

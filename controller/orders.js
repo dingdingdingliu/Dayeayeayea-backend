@@ -109,14 +109,12 @@ const orderController = {
   },
   getOneByTicket: async (req, res, next) => {
     const { ticket } = req.params
-    const { memberId } = req.auth
+    const { memberId, role } = req.auth
+    const where = role ? { ticketNo: ticket } : { ticketNo: ticket, memberId }
 
     try {
       const data = await Order.findOne({ 
-        where: {
-          ticketNo: ticket,
-          memberId
-        },
+        where,
         include: [
           {
             model: Member,
@@ -161,6 +159,7 @@ const orderController = {
       return next(createError(401, 'Get order fail'))
 
     } catch (error) {
+      console.log(error)
       return next(createError(401, 'Get order fail'))
     }
   },

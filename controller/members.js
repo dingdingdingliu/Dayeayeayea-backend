@@ -65,9 +65,11 @@ const MembersController = {
           data
         })
       }
+      console.log(data)
       return next(createError(401, 'Get member fail'))
       
     } catch (error) {
+      console.log(error);
       return next(createError(401, 'Get member fail'))
     }
   },

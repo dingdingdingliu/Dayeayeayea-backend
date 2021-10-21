@@ -25,6 +25,7 @@ module.exports = (sequelize, DataTypes) => {
       ticketNo: DataTypes.STRING,
       status: DataTypes.ENUM('處理中', '已出貨', '已取消', '已完成'),
       isDeleted: DataTypes.INTEGER,
+      subTotal: DataTypes.INTEGER,
       orderAddress: DataTypes.STRING(512),
       orderName: DataTypes.STRING,
       orderEmail: DataTypes.STRING,

@@ -1,6 +1,6 @@
-const serialNumber = (date) => {
-  const d = new Date().toLocaleDateString().replace(/\//g, '')
-  const str = `${date || d}-xxxxxxxx-xxxx`
+const serialNumber = (value) => {
+  const date = new Date().toLocaleDateString('zh', { timeZone: 'Asia/Taipei'})
+  const str = `${value || date.replace(/\//g, '')}-xxxxxxxx-xxxx`
 
   return str.replace(/[xy]/g, (c) => {
     const r = Math.random()*16|0,v=c=='x'?r:r&0x3|0x8;

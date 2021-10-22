@@ -227,6 +227,7 @@ const orderController = {
     const { 
       status,
       isDeleted,
+      subTotal,
       orderAddress,
       orderName,
       orderEmail,
@@ -242,6 +243,7 @@ const orderController = {
         ticketNo,
         status,
         isDeleted,
+        subTotal,
         orderAddress,
         orderName,
         orderEmail,

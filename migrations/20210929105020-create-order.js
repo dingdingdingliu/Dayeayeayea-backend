@@ -11,11 +11,17 @@ module.exports = {
       memberId: {
         type: Sequelize.INTEGER,
       },
+      ticketNo: {
+        type: Sequelize.STRING,
+      },
       status: {
         type: Sequelize.ENUM('處理中', '已出貨', '已取消', '已完成'),
         defaultValue: '處理中',
       },
       isDeleted: {
+        type: Sequelize.INTEGER,
+      },
+      subTotal: {
         type: Sequelize.INTEGER,
       },
       createdAt: {

@@ -17,7 +17,7 @@ const checkAuth = (req, res, next) => {
     req.auth = {
       memberId: id,
       username,
-      email
+      email,
     }
 
   } catch (err) {

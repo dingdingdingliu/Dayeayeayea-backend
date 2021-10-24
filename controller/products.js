@@ -270,6 +270,9 @@ const ProductsController = {
     }
     
   },
+  addImgs: async (req, res, next) => {
+    
+  },
   updateImgs: async (req, res, next) => {
     const { id } = req.params
     const {

@@ -117,7 +117,7 @@ const MembersController = {
     } = req.body
 
     try {
-      const _member = await Member.fineOne({ where })
+      const _member = await Member.findOne({ where })
       const _password = password ? bcrypt.hashSync(password, SALTROUNDS) : _member.password
       await _member.update({
         id,

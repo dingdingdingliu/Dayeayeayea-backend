@@ -21,8 +21,8 @@ const MembersController = {
 
       const isValid = await bcrypt.compare(password, user.password)
       if (isValid) {
-        const { id, email, level } = user
-        const token = createToken({ username, id, email, level })
+        const { id, email, level, fullname, address, phone } = user
+        const token = createToken({ id, username, email, level, fullname, address, phone })
     
         return res.status(200).json({
           ok: 1,

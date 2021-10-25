@@ -8,42 +8,26 @@ const perPageProducts = Number(process.env.PER_PAGE_PRODUCTS) || 5
 const ProductsController = {
   getAll: async (req, res, next) => {
     const { search } = req.query
-    
-    let data = null
+    const where = { isDeleted: 0 }
+
+    if (search) {
+      const searchList = search.split('+').reduce((obj, str) => {
+        if (str) obj.push({ [Op.like]: `%${str}%` })
+        return obj
+      }, [])
+      where.name = { [Op.and]: searchList }
+    }
+
     try {
-      if (search) {
-        const searchList = search.split('+').reduce((obj, str) => {
-          if (str) obj.push({ [Op.like]: `%${str}%` })
-          return obj
-        }, [])
-        
-        data = await Product.findAll({
-          where: {
-            name: {
-              [Op.and]: searchList
-            },
-            isDeleted: 0
-          },
-          include : [
-            {
-              model: Product_img,
-              attributes: ['id','imgUrlSm', 'imgUrlMd', 'imgUrlLg']
-            }
-          ]
-        })
-      } else {
-        data = await Product.findAll({
-          where: {
-            isDeleted: 0
-          },
-          include : [
-            {
-              model: Product_img,
-              attributes: ['id','imgUrlSm', 'imgUrlMd', 'imgUrlLg']
-            }
-          ]
-        })
-      }
+      const data = await Product.findAll({
+        where,
+        include : [
+          {
+            model: Product_img,
+            attributes: ['id','imgUrlSm', 'imgUrlMd', 'imgUrlLg']
+          }
+        ]
+      })
   
       return res.status(200).json({
         ok: 1,
@@ -57,12 +41,20 @@ const ProductsController = {
   },
   getByPage: async (req, res, next) => { 
     const page = Number(req.params.page)
+    const { search } = req.query
+    const where = { isDeleted: 0 }
+
+    if (search) {
+      const searchList = search.split('+').reduce((obj, str) => {
+        if (str) obj.push({ [Op.like]: `%${str}%` })
+        return obj
+      }, [])
+      where.name = { [Op.and]: searchList }
+    }
 
     try {
       const _products = await Product.findAll({
-        where: {
-          isDeleted: 0
-        },
+        where,
         include : Product_img
       })
       const totalPage = Math.ceil(_products.length / perPageProducts)
@@ -269,6 +261,35 @@ const ProductsController = {
       return next(createError(401, 'Update product fail'))
     }
     
+  },
+  addImgs: async (req, res, next) => {
+    const {
+      productId, 
+      imgUrlSm,
+      imgUrlMd,
+      imgUrlLg
+    } = req.body
+
+    const _product = await Product_img.findByPk(productId)
+    if (!_product) {
+      return next(createError(401, 'Not found product'))
+    }
+    try {
+      await Product_img.create({
+        productId,
+        imgUrlSm,
+        imgUrlMd,
+        imgUrlLg
+      })
+
+      return res.status(200).json({
+        ok: 1,
+        message: 'Add product_imgs success'
+      })
+
+    } catch (error) {
+      return next(createError(401, 'Add product_imgs fail'))
+    }
   },
   updateImgs: async (req, res, next) => {
     const { id } = req.params

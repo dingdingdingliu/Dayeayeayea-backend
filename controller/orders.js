@@ -6,8 +6,12 @@ const createError = require('http-errors')
 
 const orderController = {
   getAll: async (req, res, next) => {
+    const { condition } = req.params
+    const where = condition === 'all' ? {} : { isDeleted: 0 } 
+
     try {
       const data = await Order.findAll({
+        where,
         include: [
           {
             model: Member,

@@ -328,7 +328,7 @@ const orderController = {
       normal: '處理中',
       cancel: '已取消',
       ship: '已出貨',
-      complete: '已出貨',
+      complete: '已完成',
     }
 
     try {

@@ -275,7 +275,7 @@ const ProductsController = {
       return next(createError(401, 'Not found product'))
     }
     try {
-      await Product_img.create({
+      const _product_img = await Product_img.create({
         productId,
         imgUrlSm,
         imgUrlMd,
@@ -284,7 +284,11 @@ const ProductsController = {
 
       return res.status(200).json({
         ok: 1,
-        message: 'Add product_imgs success'
+        message: 'Add product_imgs success',
+        data: {
+          id: _product_img.id,
+          productId: _product_img.productId
+        }
       })
 
     } catch (error) {

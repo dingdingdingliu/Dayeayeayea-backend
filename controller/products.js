@@ -248,16 +248,18 @@ const ProductsController = {
         Product_imgs: imgsData
       })
 
-      imgsData.map(async ({ id, imgUrlSm, imgUrlMd, imgUrlLg }) => {
-        const _imgs = await Product_img.findByPk(id)
-        if (!_imgs) return next(createError(401, 'Update product fail'))
-
-        await _imgs.update({
-          imgUrlSm,
-          imgUrlMd,
-          imgUrlLg
+      if (imgsData || imgsData.length > 0) {
+        imgsData.map(async ({ id, imgUrlSm = '', imgUrlMd = '', imgUrlLg = '' }) => {
+          const _imgs = await Product_img.findByPk(id)
+          if (!_imgs) return next(createError(401, 'Update product fail'))
+  
+          await _imgs.update({
+            imgUrlSm,
+            imgUrlMd,
+            imgUrlLg
+          })
         })
-      })
+      }
 
       return res.status(200).json({
         ok: 1,

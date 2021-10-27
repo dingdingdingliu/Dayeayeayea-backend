@@ -310,15 +310,17 @@ const orderController = {
         Order_items: orderItem
       })
 
-      orderItem.map(async ({ id, productId, quantity }) => {
-        const _order_item = await Order_item.findByPk(id)
-        if (!_order_item) return next(createError(401, 'Update order fail'))
+      if (orderItem || orderItem.length > 0) {
+        orderItem.map(async ({ id, productId, quantity }) => {
+          const _order_item = await Order_item.findByPk(id)
+          if (!_order_item) return next(createError(401, 'Update order fail'))
 
-        await _order_item.update({
-          productId,
-          quantity
+          await _order_item.update({
+            productId,
+            quantity
+          })
         })
-      })
+      }
 
       return res.status(200).json({
         ok: 1,

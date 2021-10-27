@@ -11,6 +11,7 @@ const { checkAdmin } = require('../middlewares/authHandler')
 router.post('/login', Admin.login)
 router.use(checkAdmin)
 
+router.get('/me', Admin.checkLogin)
 router.get('/members', Members.getAll)
 router.get('/members/:id([0-9]+)', Members.getOne)
 router.patch('/members/:id([0-9]+)', Members.updateOne)

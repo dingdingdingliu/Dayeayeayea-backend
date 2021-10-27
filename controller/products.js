@@ -231,12 +231,10 @@ const ProductsController = {
 
     try {
       const _product = await Product.findOne({
-        where: { id },
-        include : Product_img
+        where: { id }
       })
 
       await _product.update({
-        id,
         name,
         price,
         discountPrice,
@@ -248,8 +246,17 @@ const ProductsController = {
         article,
         isDeleted,
         Product_imgs: imgsData
-      }, {
-        include : Product_img
+      })
+
+      imgsData.map(async ({ id, imgUrlSm, imgUrlMd, imgUrlLg }) => {
+        const _imgs = await Product_img.findByPk(id)
+        if (!_imgs) return next(createError(401, 'Update product fail'))
+
+        await _imgs.update({
+          imgUrlSm,
+          imgUrlMd,
+          imgUrlLg
+        })
       })
 
       return res.status(200).json({
@@ -306,6 +313,7 @@ const ProductsController = {
 
     try {
       const _product_img = await Product_img.findByPk(id)
+      if (!_product_img) return next(createError(401, 'Update product_imgs fail'))
 
       await _product_img.update({
         id,

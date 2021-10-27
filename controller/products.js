@@ -248,7 +248,7 @@ const ProductsController = {
         Product_imgs: imgsData
       })
 
-      if (imgsData || imgsData.length > 0) {
+      if (imgsData && imgsData.length > 0) {
         imgsData.map(async ({ id, imgUrlSm = '', imgUrlMd = '', imgUrlLg = '' }) => {
           const _imgs = await Product_img.findByPk(id)
           if (!_imgs) return next(createError(401, 'Update product fail'))
@@ -267,6 +267,7 @@ const ProductsController = {
       })
 
     } catch (error) {
+      console.log(error)
       return next(createError(401, 'Update product fail'))
     }
     

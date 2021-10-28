@@ -178,7 +178,6 @@ const ProductsController = {
       shortDesc,
       longDesc,
       article,
-      isDeleted,
       imgsData
     } = req.body
 
@@ -193,7 +192,7 @@ const ProductsController = {
         shortDesc,
         longDesc,
         article,
-        isDeleted,
+        isDeleted: 0,
         Product_imgs: imgsData
       }, {
         include : Product_img

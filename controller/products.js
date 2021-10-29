@@ -182,6 +182,13 @@ const ProductsController = {
     } = req.body
 
     try {
+      const _data = await Product.findOne({
+        where: { name }
+      })
+
+      if (_data) return next(createError(401, 'Add product fail, Product name must be unique'))
+      console.log(_data)
+
       const _product = await Product.create({
         name,
         price,

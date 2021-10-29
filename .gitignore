@@ -3,3 +3,4 @@ config/
 .env
 .vscode
 /log
+debug.log

@@ -178,11 +178,17 @@ const ProductsController = {
       shortDesc,
       longDesc,
       article,
-      isDeleted,
       imgsData
     } = req.body
 
     try {
+      const _data = await Product.findOne({
+        where: { name }
+      })
+
+      if (_data) return next(createError(401, 'Add product fail, Product name must be unique'))
+      console.log(_data)
+
       const _product = await Product.create({
         name,
         price,
@@ -193,7 +199,7 @@ const ProductsController = {
         shortDesc,
         longDesc,
         article,
-        isDeleted,
+        isDeleted: 0,
         Product_imgs: imgsData
       }, {
         include : Product_img
@@ -231,12 +237,10 @@ const ProductsController = {
 
     try {
       const _product = await Product.findOne({
-        where: { id },
-        include : Product_img
+        where: { id }
       })
 
       await _product.update({
-        id,
         name,
         price,
         discountPrice,
@@ -248,9 +252,20 @@ const ProductsController = {
         article,
         isDeleted,
         Product_imgs: imgsData
-      }, {
-        include : Product_img
       })
+
+      if (imgsData && imgsData.length > 0) {
+        imgsData.map(async ({ id, imgUrlSm = '', imgUrlMd = '', imgUrlLg = '' }) => {
+          const _imgs = await Product_img.findByPk(id)
+          if (!_imgs) return next(createError(401, 'Update product fail'))
+  
+          await _imgs.update({
+            imgUrlSm,
+            imgUrlMd,
+            imgUrlLg
+          })
+        })
+      }
 
       return res.status(200).json({
         ok: 1,
@@ -258,6 +273,7 @@ const ProductsController = {
       })
 
     } catch (error) {
+      console.log(error)
       return next(createError(401, 'Update product fail'))
     }
     
@@ -275,7 +291,7 @@ const ProductsController = {
       return next(createError(401, 'Not found product'))
     }
     try {
-      await Product_img.create({
+      const _product_img = await Product_img.create({
         productId,
         imgUrlSm,
         imgUrlMd,
@@ -284,7 +300,11 @@ const ProductsController = {
 
       return res.status(200).json({
         ok: 1,
-        message: 'Add product_imgs success'
+        message: 'Add product_imgs success',
+        data: {
+          id: _product_img.id,
+          productId: _product_img.productId
+        }
       })
 
     } catch (error) {
@@ -302,6 +322,7 @@ const ProductsController = {
 
     try {
       const _product_img = await Product_img.findByPk(id)
+      if (!_product_img) return next(createError(401, 'Update product_imgs fail'))
 
       await _product_img.update({
         id,

@@ -32,6 +32,27 @@ const AdminsController = {
     } catch (error) {
       return next(createError(401, 'Login Fail'))
     }
+  },
+  checkLogin: async (req, res, next) => {
+    const { username, role } = req.auth
+
+    try {
+      const data = await Admin.findOne({
+        where: { username }
+      })
+      if (data && role === 'supervisor') {
+        return res.status(200).json({
+          ok: 1,
+          message: 'You are real supervisor !!!'
+        })
+      }
+      console.log(data)
+      return next(createError(401, 'Who are you ?!'))
+      
+    } catch (error) {
+      console.log(error);
+      return next(createError(401, 'Who are you ?!'))
+    }
   }
 }
 

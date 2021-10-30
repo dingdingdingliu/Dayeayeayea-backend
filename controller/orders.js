@@ -26,7 +26,7 @@ const orderController = {
           },
           {
             model: Order_item,
-            attributes: ['productId', 'quantity'],
+            attributes: ['id', 'productId', 'quantity'],
             include: [
               {
                 model: Product,
@@ -78,7 +78,7 @@ const orderController = {
           },
           {
             model: Order_item,
-            attributes: ['productId', 'quantity'],
+            attributes: ['id', 'productId', 'quantity'],
             include: [
               {
                 model: Product,
@@ -133,7 +133,7 @@ const orderController = {
           },
           {
             model: Order_item,
-            attributes: ['productId', 'quantity'],
+            attributes: ['id', 'productId', 'quantity'],
             include: [
               {
                 model: Product,
@@ -189,7 +189,7 @@ const orderController = {
           },
           {
             model: Order_item,
-            attributes: ['productId', 'quantity'],
+            attributes: ['id', 'productId', 'quantity'],
             include: [
               {
                 model: Product,
@@ -309,6 +309,19 @@ const orderController = {
         shipping,
         Order_items: orderItem
       })
+
+      if (orderItem && orderItem.length > 0) {
+        orderItem.map(async ({ id, productId, quantity }) => {
+          const _order_item = await Order_item.findByPk(id)
+          if (!_order_item) return next(createError(401, 'Update order fail'))
+
+          await _order_item.update({
+            productId,
+            quantity
+          })
+        })
+      }
+
       return res.status(200).json({
         ok: 1,
         message: 'Update order success'
@@ -328,7 +341,7 @@ const orderController = {
       normal: '處理中',
       cancel: '已取消',
       ship: '已出貨',
-      complete: '已出貨',
+      complete: '已完成',
     }
 
     try {

@@ -57,6 +57,7 @@ const MembersController = {
     try {
       const data = await Member.findOne({
         where,
+        attributes: ['fullname', 'username', 'email', 'address', 'phone', 'level'],
         include : Order
       })
       if (data) {

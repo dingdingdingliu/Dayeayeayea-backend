@@ -112,7 +112,6 @@ const MembersController = {
     const { 
       fullname,
       password,
-      level,
       address,
       phone,
     } = req.body
@@ -124,7 +123,6 @@ const MembersController = {
         id,
         fullname,
         password: _password,
-        level,
         address,
         phone,
       })

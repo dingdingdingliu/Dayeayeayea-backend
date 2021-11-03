@@ -248,32 +248,92 @@ const orderController = {
       orderItem
     } = req.body
 
-    try {
-      const _order = await Order.create({
-        memberId,
-        ticketNo,
-        status,
-        isDeleted,
-        subTotal,
-        orderAddress,
-        orderName,
-        orderEmail,
-        orderPhone,
-        payment,
-        shipping,
-        Order_items: orderItem
-      }, {
-        include: Order_item
+    const productIdList = orderItem.map((item) => item.productId);
+    const productsData = await Product.findAll({
+      where: { id: { [Op.in]: productIdList } },
+      include: User,
+    }).then((products) =>
+      products.map((product) => {
+        let currentItem = sortedCartItems.find(
+          (item) => item.ProductId === product.id
+        );
+        return {
+          ProductId: product.id,
+          product_name: product.name,
+          product_category_id: product.ProductCategoryId,
+          product_picture_url: product.picture_url,
+          product_info: product.info,
+          productOriginQuantity: product.quantity, // 商品數量
+          product_quantity: currentItem.product_quantity, // 要買的數量
+          product_price: product.price,
+          product_delivery: product.delivery,
+          seller_name: product.User.nickname,
+          seller_email: product.User.email,
+          seller_address: product.User.address,
+        };
       })
+    );
 
-      if (_order) {
-        return res.status(201).json({
-          ok: 1,
+    try {
+      await sequelize.transaction(async (t) => {
+        const _order = await Order.create({
+          memberId,
           ticketNo,
-          message: 'Add order success',
+          status,
+          isDeleted,
+          subTotal,
+          orderAddress,
+          orderName,
+          orderEmail,
+          orderPhone,
+          payment,
+          shipping,
+          Order_items: orderItem
+        }, {
+          include: Order_item
+        }, { 
+          transaction: t 
         })
-      }
-      return next(createError(401, 'Add order fail'))
+
+        if (_order) {
+          return res.status(201).json({
+            ok: 1,
+            ticketNo,
+            message: 'Add order success',
+          })
+        }
+
+        
+
+        // 計算商品數量足夠否
+        await Promise.all(
+          productsData.map((productData) => {
+            let stockQuantity = productData.productOriginQuantity; // 賣家的庫存數量
+            let cartQuantity = productData.product_quantity; // 準備要買的數量
+            console.log("商品 id:", productData.ProductId);
+            console.log("賣家的庫存數量:", stockQuantity);
+            console.log("準備要買的數量:", cartQuantity);
+
+            // 數量不夠賣，就回傳錯誤跳出 transaction
+            if (stockQuantity - cartQuantity < 0) {
+              console.log("超賣錯誤:");
+              throw new Error();
+            }
+            // 把要買的商品數量從賣家商品的數量中減去
+            Product.update(
+              { quantity: stockQuantity - cartQuantity },
+              { where: { id: productData.ProductId } },
+              { transaction: t }
+            );
+          })
+        );
+
+        return next(createError(401, 'Add order fail'))
+
+      })
+      
+
+      
   
     } catch (error) {
       return next(createError(401, 'Add order fail'))

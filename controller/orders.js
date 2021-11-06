@@ -1,4 +1,6 @@
 const db = require('../models')
+const { Op } = require('sequelize')
+const { sequelize } = require('../models')
 const { Order, Order_item, Member, Product, Product_img, Message, Admin } = db
 const { serialNumber } = require('../utils/helper')
 const createError = require('http-errors')
@@ -234,10 +236,9 @@ const orderController = {
   addOne: async (req, res, next) => {
     const { memberId } = req.auth
     const ticketNo = serialNumber()
-
     const { 
       status,
-      isDeleted,
+      isDeleted = 0,
       subTotal,
       orderAddress,
       orderName,
@@ -249,33 +250,70 @@ const orderController = {
     } = req.body
 
     try {
-      const _order = await Order.create({
-        memberId,
-        ticketNo,
-        status,
-        isDeleted,
-        subTotal,
-        orderAddress,
-        orderName,
-        orderEmail,
-        orderPhone,
-        payment,
-        shipping,
-        Order_items: orderItem
-      }, {
-        include: Order_item
+      const productsData = await Product.findAll({
+        where: { id: { [Op.in]: orderItem.map((item) => item.productId) } },
+        attributes: ['id','quantity']
       })
-
-      if (_order) {
-        return res.status(201).json({
-          ok: 1,
-          ticketNo,
-          message: 'Add order success',
+  
+      const isProductEnough = orderItem.every((item) => {
+        const _product = productsData.find((product) => product.id === item.productId)
+        return _product.quantity > item.quantity
+      })
+      if (!isProductEnough) {
+        orderItem.forEach((item) => {
+          const _product = productsData.find((product) => product.id === item.productId)
+          item.stock = _product.quantity
+        })
+        return res.status(401).json({
+          ok: 0,
+          message: 'Product stock is not enough',
+          data: orderItem
         })
       }
-      return next(createError(401, 'Add order fail'))
-  
+
+      await sequelize.transaction(async (t) => {
+        const _order = await Order.create({
+          memberId,
+          ticketNo,
+          status,
+          isDeleted,
+          subTotal,
+          orderAddress,
+          orderName,
+          orderEmail,
+          orderPhone,
+          payment,
+          shipping,
+          Order_items: orderItem
+        }, 
+        { include: Order_item },
+        { transaction: t })
+
+        await Promise.all(productsData.map(
+          (product) => {
+            const _item = orderItem.find((item) => product.id === item.productId)
+            if (product.quantity - _item.quantity < 0) throw Error()
+            Product.update(
+              { quantity: product.quantity - _item.quantity },
+              { where: { id: product.id } },
+              { transaction: t }
+            );
+          })
+        );
+
+        if (_order) {
+          return res.status(201).json({
+            ok: 1,
+            ticketNo,
+            message: 'Add order success',
+            data: _order
+          })
+        }
+        return next(createError(401, 'Add order fail'))
+      })
+
     } catch (error) {
+      console.log(error)
       return next(createError(401, 'Add order fail'))
     }
   },

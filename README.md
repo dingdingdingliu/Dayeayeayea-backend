@@ -1,6 +1,6 @@
 # DAYEAYEAYEA-Backend
 
-![dayeayeayea](C:\Users\mumu892101\Desktop\dayeayeayea.png)
+![dayeayeayea](https://i.imgur.com/BQbL1Fc.png)
 
 此專案為 [程式導師實驗計畫第五期](https://github.com/Lidemy/mentor-program-5th) 的 Final project - DAYEAYEAYEA 購物網站的後端專案，團隊使用 React / Express & Sequelize 進行前後端分離開發。
 
@@ -12,15 +12,17 @@
 
 ## 目錄
 
-\- [使用套件](#使用套件)
+- [使用套件](#使用套件)
 
-\- [專案建置](#專案建置)
+- [專案建置](#專案建置)
 
-\- [專案資料架構](#專案資料架構)
+- [專案資料架構](#專案資料架構)
 
-\- [資料庫關連](#資料庫關連)
+- [資料庫關聯](#資料庫關聯)
 
-\- [API 文件](#API-文件)
+- [API 測試文件](#API 測試文件)
+- [License](#License)
+- [聲明](#聲明)
 
 
 
@@ -223,7 +225,7 @@ npm run start
 
 > 測試連結：[Swagger UI (coolizz.tw)](https://api.coolizz.tw/api-docs/)
 
-![swaggerAPI](C:\Users\mumu892101\Desktop\swaggerAPI.gif)
+![swaggerAPI](https://i.imgur.com/QB2rY5A.gif)
 
 
 

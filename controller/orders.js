@@ -252,21 +252,24 @@ const orderController = {
     try {
       const productsData = await Product.findAll({
         where: { id: { [Op.in]: orderItem.map((item) => item.productId) } },
-        attributes: ['id','quantity']
+        attributes: ['id', 'status', 'quantity']
       })
-  
+
+      const isProductStatusOn = productsData.every((product) => product.status === 'on')
       const isProductEnough = orderItem.every((item) => {
         const _product = productsData.find((product) => product.id === item.productId)
-        return _product.quantity > item.quantity
+        return _product.quantity >= item.quantity
       })
-      if (!isProductEnough) {
+
+      if (!isProductEnough || !isProductStatusOn) {
         orderItem.forEach((item) => {
           const _product = productsData.find((product) => product.id === item.productId)
           item.stock = _product.quantity
+          item.status = _product.status
         })
         return res.status(401).json({
           ok: 0,
-          message: 'Product stock is not enough',
+          message: !isProductEnough ? 'Product stock is not enough' : 'Product status is off',
           data: orderItem
         })
       }
@@ -292,7 +295,7 @@ const orderController = {
         await Promise.all(productsData.map(
           (product) => {
             const _item = orderItem.find((item) => product.id === item.productId)
-            if (product.quantity - _item.quantity < 0) throw Error()
+            if (product.quantity - _item.quantity < 0 ) throw Error()
             Product.update(
               { quantity: product.quantity - _item.quantity },
               { where: { id: product.id } },

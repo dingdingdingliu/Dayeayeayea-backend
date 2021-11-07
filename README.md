@@ -20,7 +20,7 @@
 
 - [資料庫關聯](#資料庫關聯)
 
-- [API 測試文件](#API 測試文件)
+- [API文件](#API文件)
 - [License](#License)
 - [聲明](#聲明)
 
@@ -221,7 +221,7 @@ npm run start
 
 
 
-## API 測試文件
+## API文件
 
 > 測試連結：[Swagger UI (coolizz.tw)](https://api.coolizz.tw/api-docs/)
 

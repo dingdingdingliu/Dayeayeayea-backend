@@ -1,5 +1,5 @@
 const serialNumber = (value) => {
-  const date = new Date().toLocaleDateString('zh', { timeZone: 'Asia/Taipei'})
+  const date = new Date().toLocaleDateString('en-ZA', { timeZone: 'Asia/Taipei'})
   const str = `${value || date.replace(/\//g, '')}-xxxxxxxx-xxxx`
 
   return str.replace(/[xy]/g, (c) => {

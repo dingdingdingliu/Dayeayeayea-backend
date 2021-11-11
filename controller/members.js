@@ -57,7 +57,7 @@ const MembersController = {
     try {
       const data = await Member.findOne({
         where,
-        attributes: ['fullname', 'username', 'email', 'address', 'phone', 'level'],
+        attributes: ['id', 'fullname', 'username', 'email', 'address', 'phone', 'level'],
         include : Order
       })
       if (data) {
@@ -96,7 +96,7 @@ const MembersController = {
         address,
         phone,
       })
-      return res.status(201).json({
+      return res.status(200).json({
         ok: 1,
         message: 'Register Success',
       })
@@ -107,10 +107,11 @@ const MembersController = {
   },
   updateOne: async (req, res, next) => {
     const { id } = req.params
-    const { memberId } = req.auth
+    const { memberId, role } = req.auth
     const where = id ? { id } : { id: memberId }
     const { 
       fullname,
+      level,
       password,
       address,
       phone,
@@ -119,13 +120,15 @@ const MembersController = {
     try {
       const _member = await Member.findOne({ where })
       const _password = password ? bcrypt.hashSync(password, SALTROUNDS) : _member.password
-      await _member.update({
+      const bodyData = {
         id,
         fullname,
         password: _password,
         address,
         phone,
-      })
+      }
+      if (role) bodyData['level'] = level
+      await _member.update(bodyData)
 
       return res.status(200).json({
         ok: 1,

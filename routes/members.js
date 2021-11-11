@@ -8,7 +8,7 @@ router.post('/login', Members.login)
 router.post('/', Members.addOne)
 
 router.use(checkAuth)
-router.get('/check', (req, res, next) => res.status(200).json({ ok: 1 }))
+router.post('/check', (req, res, next) => res.status(200).json({ ok: 1 }))
 router.get('/me', Members.getOne)
 router.patch('/me', Members.updateOne)
 
